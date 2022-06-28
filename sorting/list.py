@@ -1,3 +1,6 @@
+#usare solo >= 0 ya que enrealidad no aftecta esa pega extra en el pensamiento
+#del algoritmo
+
 #SelectionSort
 #BubbleSort
 #RecursiveBubbleSort
@@ -77,7 +80,55 @@ class SimpleLinkedList:
                 node=node.next
                 C+=1
             return node
-    
+    def getMax(self):
+        if not self.head: return None
+        else:
+            M=-1
+            i=-1
+            C=0
+            node = self.head
+            nodeReturn = None
+            while node:
+                if node.data > M:
+                    M = node.data
+                    i = C
+                    nodeReturn=node
+                node=node.next
+                C+=1
+            return (nodeReturn, i)
+    def getMin(self):
+        if not self.head: return None
+        else:
+            m=99999999
+            i=-1
+            C=0
+            node = self.head
+            nodeReturn = None
+            while node:
+                if node.data < m:
+                    m = node.data
+                    i = C
+                    nodeReturn=node
+                node=node.next
+                C+=1
+            return (nodeReturn, i)   
+    def helper_popMax(self):
+        if not self.head: return None
+        else:
+            node = self.head
+            prevNode = None
+            nodeReturn = None
+            prevnodeReturn = None
+            M=-1   
+            while node:
+                if node.data > M:
+                    M = node.data
+                    nodeReturn=node
+                    prevnodeReturn=prevNode
+                prevNode=node
+                node=node.next
+            return prevnodeReturn,nodeReturn
+
                 
 
             
@@ -121,9 +172,11 @@ class DoubleLinkedList:
 
         
 SimpleL1=SimpleLinkedList()
-SimpleL1.push(6)
+SimpleL1.push(0)
+SimpleL1.push(15)
 SimpleL1.push(5)
 SimpleL1.push(4)
+SimpleL1.push(13)
 SimpleL1.printList()
 
 DoubleL2=DoubleLinkedList()
@@ -133,9 +186,19 @@ DoubleL2.push(4)
 DoubleL2.pushTop(11)
 #DoubleL2.printList()
 
-ith=3
-print('ith',ith)
-Anode = SimpleL1.select_ith(ith)
-if Anode: Anode.printself()
-else: print('node not found')
+#ith=2
+#print('ith',ith)
+#Anode = SimpleL1.select_ith(ith)
+#if Anode: Anode.printself()
+#else: print('node not found')
 
+
+#Max1,ii= SimpleL1.getMax()
+#Max1.printself()
+#min1= SimpleL1.getMin()
+#print(min1)
+
+PrevMax1, CurrentMax1 = SimpleL1.helper_popMax()
+print('jiro')
+PrevMax1.printself()
+CurrentMax1.printself()
