@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <algorithm>
 
 using namespace std;
@@ -10,7 +10,7 @@ class Solution
 public:
     vector<vector<string>> groupAnagrams(vector<string> &strs)
     {
-        map<string, vector<string>> ht;
+        unordered_map<string, vector<string>> ht;
         vector<vector<string>> ans;
         for (auto it = begin(strs); it != end(strs); ++it)
         {
