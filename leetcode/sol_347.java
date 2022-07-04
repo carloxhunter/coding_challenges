@@ -1,66 +1,79 @@
 package leetcode;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class sol_347 {
     public static void main(String args[]) {
         Solution sol = new Solution();
         int input[] = { 1, 1, 1, 2, 2, 3 };
+        int input2[] = { 4, 1, -1, 2, -1, 2, 3 };
         int kval = 2;
-        sol.topKFrequent(input, kval);
+        sol.topKFrequent(input2, kval);
     }
 }
 
 class Solution {
-    void printvals(HashMap<Integer, int[]> HT, int min_of_max, int[] ans) {
-        HT.entrySet().forEach(entry->    {
-            System.out.println(entry.getKey() + " : [" + entry.getValue()[0] + ", " + entry.getValue()[1] + "]");
+    void printvals(LinkedHashMap<Integer, Integer> HT, int min_of_max, int[] ans) {
+        HT.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
         });
-        System.out.println("min "+min_of_max);
+        System.out.println("min " + min_of_max);
         System.out.println("arr ans");
-        for(int i = 0;i<ans.length;i++)
-        {
+        for (int i = 0; i < ans.length; i++) {
             System.out.println("ans[" + i + "]:" + ans[i]);
         }
     }
+
     public int[] topKFrequent(int[] nums, int k) {
-        HashMap<Integer, int[]> HT = new HashMap<Integer, int[]>();
+        if (nums.length == 1) {
+            return nums;
+        }
+        LinkedHashMap<Integer, Integer> HT = new LinkedHashMap<Integer, Integer>();
         boolean isk;
-        int min_of_max = nums[0];
         int[] ans = new int[k];
         for (int i = 0; i < nums.length; i++) {
             int val = nums[i];
             isk = HT.containsKey(val);
-            boolean st = i + 1 <= k;
-            //System.out.println(starting+" "+k);
-            if (!isk && st) {   
-                HT.put(val, new int[] { 1, i });
-                ans[i] = val;
-                //keep track of min_of_max
-                if (1 <= HT.get(min_of_max)[0]){
-                    min_of_max = val;
-                } 
+            if (!isk) {
+                HT.put(val, 1);
+            } else {
+                int rval = HT.get(val);
+                HT.put(val, rval + 1);
             }
-            else if(!isk && !st){
-                HT.put(val, new int[] { 1, -1 });
-            }
-            else {
-                int[] vals = HT.get(val);
-                int[] mins = HT.get(min_of_max);
-                vals[0]+=1;
+        };
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<Map.Entry<Integer, Integer>>(HT.entrySet());
+        Collections.sort(
+                list,
+                new Comparator<Map.Entry<Integer, Integer>>() {
+                    // Comparing two entries by value
+                    public int compare(
+                            Map.Entry<Integer, Integer> entry1,
+                            Map.Entry<Integer, Integer> entry2) {
 
-                if (vals[0] <= HT.get(min_of_max)[0]){
-                    int idx = mins[1];
-                    System.out.println("idx "+idx+" vals {"+vals[0]+" : "+vals[1]+"}");
-                    ans[idx]=vals[0];
-                    //min_of_max = vals[1];
-                } 
-
+                        // Substracting the entries
+                        return entry1.getValue()
+                                - entry2.getValue();
+                    }
+                });
+        int cc = 0;
+        int lsize = list.size();
+        boolean valid = false;
+        int arridx = 0;
+        for (Map.Entry<Integer, Integer> vals : list) {
+            valid = lsize - cc <= k;
+            arridx = lsize-cc-1;
+            if (valid){
+                ans[arridx] = vals.getKey();
             }
+            
+            cc+=1;
         }
-
-
-    printvals(HT, min_of_max, ans);
-    int intArray[] = { 13, 14, 15 };
-    return intArray;
-}}
+        return ans;
+    }
+}
